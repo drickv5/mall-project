@@ -1,0 +1,22 @@
+{% extends 'g_base_top_rightsearch.html' %}
+{% comment %}
+    四级模板:
+        用户中心侧边栏
+{% endcomment %}
+{% block right_search_page_center %}
+    <div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="user_center_info.html">· 个人信息</a></li>
+				<li><a href="user_center_order.html" class="active">· 全部订单</a></li>
+				<li><a href="user_center_site.html">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+            {% block right_content %}
+                {# 此处根据左侧选择填写右侧具体功能页面 #}
+            {% endblock right_content %}
+		</div>
+	</div>
+{% endblock right_search_page_center %}
