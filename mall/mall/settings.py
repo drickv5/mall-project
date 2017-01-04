@@ -25,7 +25,7 @@ SECRET_KEY = 'x&18aqun6q2=1lloe%=*+=huldx6du=l8!bl#_payn23n8j!pz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*",]
 
 
 # Application definition
@@ -37,6 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'web_hao',
+    'goods_qi',
+    'cart_kun',
+    'user_qiao',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +60,7 @@ ROOT_URLCONF = 'mall.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,8 +81,12 @@ WSGI_APPLICATION = 'mall.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'malldb',
+        'USER':'root',
+        'PASSWORD':'mysql',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
 
@@ -100,3 +109,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
