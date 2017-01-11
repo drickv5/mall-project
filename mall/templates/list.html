@@ -1,0 +1,298 @@
+{% extends 'base/g_base_top_centersearch.html'%}
+
+
+{% block content_without_lsc %}
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>	
+				<span></span>			
+				<ul class="subnav">
+					<li><a href="/mall/list/?typeId=1&pindex=1&sort=default" class="fruit">新鲜水果</a></li>
+					<li><a href="/mall/list/?typeId=2&pindex=1&sort=default" class="seafood">海鲜水产</a></li>
+					<li><a href="/mall/list/?typeId=3&pindex=1&sort=default" class="meet">猪牛羊肉</a></li>
+					<li><a href="/mall/list/?typeId=4&pindex=1&sort=default" class="egg">禽类蛋品</a></li>
+					<li><a href="/mall/list/?typeId=5&pindex=1&sort=default" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="/mall/list/?typeId=6&pindex=1&sort=default" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/mall/index/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="/mall/list/?typeId=0&pindex=1&sort=default">全部分类</a>
+		<span>></span>
+		{% if typeId == 1 %}
+		<a href="/mall/list/?typeId=1&pindex=1&sort=default">新鲜水果</a>
+		{% elif typeId == 2 %}
+		<a href="/mall/list/?typeId=2&pindex=1&sort=default">海鲜水产</a>
+		{% elif typeId == 3 %}
+		<a href="/mall/list/?typeId=3&pindex=1&sort=default">猪牛羊肉</a>
+		{% elif typeId == 4 %}
+		<a href="/mall/list/?typeId=4&pindex=1&sort=default">禽类蛋品</a>
+		{% elif typeId == 5 %}
+		<a href="/mall/list/?typeId=5&pindex=1&sort=default">新鲜蔬菜</a>
+		{% elif typeId == 6 %}
+		<a href="/mall/list/?typeId=6&pindex=1&sort=default">速冻食品</a>
+		{% endif %}
+	</div>
+
+	<!-- 新品推荐 -->
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+					<li>
+						<a href="/mall/detail/?sort={{ sort }}&goodsId={{ maxGoods_1.id}}"><img src="{{ maxGoods_1.gimg }}"></a>
+						<h4><a href="#">{{ maxGoods_1.gtitle }}</a></h4>
+						<div class="prize">{{ maxGoods_1.gprice }}</div>
+					</li>
+					<li>
+						<a href="/mall/detail/?sort={{ sort }}&goodsId={{ maxGoods_2.id}}"><img src="{{ maxGoods_2.gimg }}"></a>
+						<h4><a href="#">{{ maxGoods_2.gtitle }}</a></h4>
+						<div class="prize">{{ maxGoods_2.gprice }}</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+			
+			<!-- 根据用户选择的方式，返回排序方式对应的参数 -->
+			{% if sort == 'default' or sort == '' %}
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=default" class="active">默认</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=price">价格</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=buycount">人气</a>
+			{% elif sort == 'price' %}
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=default">默认</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=price" class="active">价格</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=buycount">人气</a>
+			{% elif sort == 'buycount' %}	
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=default">默认</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=price">价格</a>
+				<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.number }}&sort=buycount" class="active">人气</a>
+				{% endif %}		
+			</div>
+
+
+
+
+
+			<ul class="goods_type_list clearfix">
+
+			<!-- 循环输出相应类别商品-->
+			{% for goods in page %}
+
+			<li>
+					<a href="/mall/detail/?sort={{ sort }}&goodsId={{ goods.id}}"><img src="{{ goods.gimg}}/"></a>
+					<h4><a href="#">{{ goods.gtitle}}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{goods.gprice}}</span>
+						<span class="unit">{{goods.gprice}}/{{goods.gunit}}</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+			{% endfor %}
+
+			</ul>
+
+
+
+
+			<!-- 底部页码 -->
+			<div class="pagenation">
+			{% if page.has_previous %}
+			<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.previous_page_number }}&sort={{ sort }}">上一页</a>
+			{% else %}
+			<a href="#">上一页</a>
+			{% endif %}
+
+			{% for num in page.paginator.page_range%}
+			{% if num == page.number%}
+			<a href="#" class="active">{{num}}</a>
+			{% else %}
+			<a href="/mall/list/?typeId={{ typeId }}&pindex={{ num }}&sort={{ sort }}">{{num}}</a>
+			{% endif %}
+			{% endfor%}
+
+			{% if page.has_next %}
+			<a href="/mall/list/?typeId={{ typeId }}&pindex={{ page.next_page_number }}&sort={{ sort }}">下一页</a>
+			{% else %}
+			<a href="#">下一页</a>
+			{% endif %}
+			</div>
+
+
+			
+
+
+
+			
+
+
+
+
+				<!-- <li>
+					<a href="detail.html"><img src="images/goods/goods003.jpg"></a>
+					<h4><a href="detail.html">大兴大棚草莓</a></h4>
+					<div class="operate">
+						<span class="prize">￥16.80</span>
+						<span class="unit">16.80/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods004.jpg"></a>
+					<h4><a href="#">吐鲁番梨光杏</a></h4>
+					<div class="operate">
+						<span class="prize">￥5.50</span>
+						<span class="unit">5.50/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods005.jpg"></a>
+					<h4><a href="#">黄肉桃</a></h4>
+					<div class="operate">
+						<span class="prize">￥10.00</span>
+						<span class="unit">10.00/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods006.jpg"></a>
+					<h4><a href="#">进口西梅</a></h4>
+					<div class="operate">
+						<span class="prize">￥28.80</span>
+						<span class="unit">28.8/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods007.jpg"></a>
+					<h4><a href="#">香梨</a></h4>
+					<div class="operate">
+						<span class="prize">￥6.45</span>
+						<span class="unit">6.45/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods008.jpg"></a>
+					<h4><a href="#">栗子</a></h4>
+					<div class="operate">
+						<span class="prize">￥9.50</span>
+						<span class="unit">9.50/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods009.jpg"></a>
+					<h4><a href="#">海南香蕉</a></h4>
+					<div class="operate">
+						<span class="prize">￥3.30</span>
+						<span class="unit">3.30/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods010.jpg"></a>
+					<h4><a href="#">青苹果</a></h4>
+					<div class="operate">
+						<span class="prize">￥5.00</span>
+						<span class="unit">5.00/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods011.jpg"></a>
+					<h4><a href="#">山莓</a></h4>
+					<div class="operate">
+						<span class="prize">￥28.80</span>
+						<span class="unit">28.8/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+
+				<li>
+					<a href="#"><img src="images/goods/goods012.jpg"></a>
+					<h4><a href="#">奇异果</a></h4>
+					<div class="operate">
+						<span class="prize">￥25.80</span>
+						<span class="unit">25.8/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+				<li>
+					<a href="#"><img src="images/goods/goods013.jpg"></a>
+					<h4><a href="#">蜜桔</a></h4>
+					<div class="operate">
+						<span class="prize">￥4.80</span>
+						<span class="unit">4.8/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+				<li>
+					<a href="#"><img src="images/goods/goods014.jpg"></a>
+					<h4><a href="#">脐橙</a></h4>
+					<div class="operate">
+						<span class="prize">￥3.50</span>
+						<span class="unit">3.50/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+				<li>
+					<a href="#"><img src="images/goods/goods001.jpg"></a>
+					<h4><a href="#">进口柠檬</a></h4>
+					<div class="operate">
+						<span class="prize">￥3.90</span>
+						<span class="unit">3.90/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+				<li>
+					<a href="#"><img src="images/goods/goods002.jpg"></a>
+					<h4><a href="#">玫瑰香葡萄</a></h4>
+					<div class="operate">
+						<span class="prize">￥16.80</span>
+						<span class="unit">16.80/500g</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>    
+			</ul>  -->
+
+			<!-- <div class="pagenation">
+				<a href="#"><上一页</a>
+				<a href="#" class="active">1</a>
+				<a href="#">2</a>
+				<a href="#">3</a>
+				<a href="#">4</a>
+				<a href="#">5</a>
+				<a href="#">下一页></a>
+			</div> -->
+
+
+
+		</div>
+	</div>
+
+
+{% endblock content_without_lsc %}

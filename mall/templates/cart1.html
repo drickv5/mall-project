@@ -1,0 +1,337 @@
+{% extends 'g_base_top_rightsearch.html' %}
+{% comment %}
+    购物车页面
+        goodsCount --> 全部商品样数(购物车信息条数)
+
+    To-Do List:
+        1. ajax cartInfo 数据库的数量更改 √
+        2. ajax cartInfo 数据库的信息删除 √
+        3. ajax orderInfo 数据传递
+{% endcomment %}
+
+{% block title %}
+    <title>天天生鲜-购物车</title>
+{% endblock title %}
+{% block js %}
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        function updateCartGoodCount(obj, count) {
+            {# 更新购物车表中该商品的数量 #}
+            // To-Do
+        }
+        function updateGoodTotalPrice(obj, count) {
+            {# 根据数量更新当前物品总价格 #}
+            //alert(obj.parent().parent().prev().attr('class'));
+            var gPrice = parseFloat(obj.parent().parent().prev().html()); // 单价
+            var totalPrice = gPrice * count; // 总价
+            totalPrice = totalPrice.toFixed(2) + '元';
+            obj.parent().parent().next().html(totalPrice); // 更新页面中该商品条目的总价格
+        }
+
+        function updateGoodsTotalCountAndPrice() {
+            {# 更新所有选中商品的总计数量和金额 #}
+            // 取出所有选中的行
+            var checkboxList = $('.cart_list_td input[type="checkbox"]');
+            checkedList = checkboxList.filter(function () {
+                return $(this).prop('checked') == true;
+            });
+
+            var totalCount = parseInt(0); // 商品总数
+            var totalPrice = parseFloat(0); // 商品总价格
+            $(checkedList).each(function () {
+                var count = parseInt($(this).parent().next().next().next().next().next().find('input').val()); // 该商品数量
+                // var price = parseFloat($(this).parent().next().next().next().next().html()); // 该商品单价
+                totalCount += count;
+                var goodsPrice = $(this).parent().next().next().next().next().next().next().html();
+                totalPrice = parseFloat(totalPrice) + parseFloat(goodsPrice);
+            });
+            $('.settlements .col03 b').html(totalCount);
+            $('.settlements .col03 em').html(totalPrice.toFixed(1));
+        }
+        
+        function updateCartTotalCount() {
+            {# 更新左上方商品总数 #}
+            var totalCartCount = 0;
+            $('.total_count em').html(totalCartCount);
+            $('.cart_list_td .col06 input[type="text"]').each(function () {
+                totalCartCount += parseInt($(this).val());
+            });
+            $('.total_count em').html(totalCartCount);
+        }
+        
+        function changeCartGoodCount(obj) {
+            {# Ajax 更新数据库中商品数量 #}
+            cart_pk = obj.parent().parent().parent().attr('name');
+            newCount = obj.parent().find("input").val();
+            $.post(
+			    '/cartInfo/changeCount/',
+			    {
+			        'cart_pk': cart_pk,
+				    'count': newCount,
+			    },
+			    function (list) {
+                    {# 返回结果 #}
+                    var count = list.updatedCount;
+                    $('ul[name=list.cpk] .num_show').val(count);
+                    {# 更新购物车数据库中该商品的数量 #}
+                    updateCartGoodCount($(this), count);
+                    {# 更新本商品信息总价格 #}
+                    updateGoodTotalPrice($(this), count);
+                    {# 更新购物车中商品总数 #}
+                    updateCartTotalCount();
+			    }
+		    );
+        }
+
+    </script>
+    <script>
+        $(function () {
+
+            {# 页面加载后, 显示所有商品数量 #}
+            updateCartTotalCount();
+
+            {# 页面加载后, 根据数量, 更新价格信息 #}
+            $('.num_show').each(function () {
+                var count = $(this).val();
+                updateGoodTotalPrice($(this), count);
+            });
+            updateGoodsTotalCountAndPrice();
+
+            {# 数量更改后, 更改总价格 #}
+
+                {# 点击+ 增加商品数量 #}
+                $('.add').click(function () {
+                    var count = $(this).next().val();
+                    count = parseInt(count) + 1;
+                    $(this).next().val(count);
+                    {# 更新购物车数据库中该商品的数量 #}
+                    updateCartGoodCount($(this), count);
+                    {# 更新本商品信息总价格 #}
+                    updateGoodTotalPrice($(this), count);
+                    {# 更新购物车中商品总数 #}
+                    updateCartTotalCount();
+                    {# 更改购物车数据库中该商品的数量 #}
+                    changeCartGoodCount($(this));
+                });
+
+                {# 直接修改数量 #}
+                // To-Do
+                // 直接修改数量时候---未完成
+                $('.num_show').blur(function () {
+                    var count = $(this).val();
+                    if (parseInt(count)>0){
+                        $(this).val(count);
+                        {# 更新购物车数据库中该商品的数量 #}
+                        updateCartGoodCount($(this), count);
+                        {# 更新本商品信息总价格 #}
+                        updateGoodTotalPrice($(this), count);
+                        {# 更新购物车中商品总数 #}
+                        updateCartTotalCount();
+                        {# 更改购物车数据库中该商品的数量 #}
+                        changeCartGoodCount($(this));
+                    } else {
+                        $(this).val(1);
+                        count = 1;
+                        {# 更新购物车数据库中该商品的数量 #}
+                        updateCartGoodCount($(this), count);
+                        {# 更新本商品信息总价格 #}
+                        updateGoodTotalPrice($(this), count);
+                        {# 更新购物车中商品总数 #}
+                        updateCartTotalCount();
+                        {# 更改购物车数据库中该商品的数量 #}
+                        changeCartGoodCount($(this));
+                    }
+                });
+
+                {# 点击- 减少商品数量 #}
+                $('.minus').click(function () {
+                    var count = $(this).prev().val();
+                    if (count>1) {
+                        count = parseInt(count) - 1;
+                        $(this).prev().val(count);
+                        {# 更新购物车数据库中该商品的数量 #}
+                        updateCartGoodCount($(this), count);
+                        {# 更新本商品信息总价格 #}
+                        updateGoodTotalPrice($(this), count);
+                        {# 更新购物车中商品总数 #}
+                        updateCartTotalCount();
+                        {# 更改购物车数据库中该商品的数量 #}
+                        changeCartGoodCount($(this));
+                    }
+                });
+
+                {# 全选的状态更改 #}
+                $('.settlements .col01 input[type="checkbox"]').click(function () {
+                    if ($(this).prop('checked') == true) {
+                        {# 未选中-->选中, 所有商品被勾选 #}
+                        checkboxList = $('.cart_list_td input[type="checkbox"]');
+                        checkboxList.each(function () {
+                            $(this).prop('checked', true);
+                        });
+                    }
+                    {# 选中-->未选中, 选中商品状态不变 #}
+                });
+
+                {# 当修改商品数量|修改选中状态|删除购物车 重新计算全部商品数量及价格 #}
+                $('.add').click(function () {
+                    updateGoodsTotalCountAndPrice();
+                });
+                $('.minus').click(function () {
+                    updateGoodsTotalCountAndPrice();
+                });
+                $('input[type="checkbox"]').click(function () {
+                    {# 如果取消选中, 则全选按钮取消选中 #}
+                    if (!$(this).prop('checked') == true) {
+                        $('.settlements .col01 input[type="checkbox"]').removeAttr('checked');
+                    }
+                    updateGoodsTotalCountAndPrice();
+                });
+                $('.col08 a').click(function () {
+                    var del_cartInfo_pk = $(this).parent().parent().attr('name');
+                    var del_cartInfo_ul = $(this).parent().parent();
+                    $.post(
+			            '/cartInfo/delCartInfo/',
+			        {
+			            'cart_pk': del_cartInfo_pk,
+			        },
+			        function (list) {
+                        if (list.delResult == '1'){
+                            {# 删除成功, 更新页面 #}
+                            del_cartInfo_ul.remove();
+                            updateCartTotalCount();
+                            updateGoodsTotalCountAndPrice();
+                        }
+			        });
+                });
+                $('.num_show').blur(function () {
+                    updateGoodsTotalCountAndPrice();
+                });
+
+            $('.settlements .col04 a').click(function () {
+                var checkboxList = $('.cart_list_td input[type="checkbox"]');
+                checkedList = checkboxList.filter(function () {
+                    return $(this).prop('checked') == true;
+                });
+{#                var cartPkList = [];#}
+{#                var goodCountList = [];#}
+{#                var goodPriceList = [];#}
+{#                $(checkedList).each(function () {#}
+{#                    cartPkList.push($(this).attr('name'));#}
+{#                    goodCountList.push($(this).parent().next().next().next().next().next().find('input').val());#}
+{#                    goodPriceList.push(parseFloat($(this).parent().next().next().next().next().html()))#}
+{#                });#}
+{#                alert(cartPkList);#}
+{#                alert(goodCountList);#}
+{#                alert(goodPriceList);#}
+{#                $.get(#}
+{#                    '/orderInfo/from_cart/',#}
+{#                    {#}
+{#                        'cartPkList': cartPkList,#}
+{#                        'goodCountList': goodCountList,#}
+{#                        'goodPriceList': goodPriceList,#}
+{#                    }#}
+{#                );#}
+                var paramStr = '?'
+                $(checkedList).each(function (index) {
+                    // cart_pk
+                    paramStr += 't1';
+                    paramStr += '='
+                    paramStr += $(this).attr('name');
+                    paramStr += '&'
+                    // good_price
+                    paramStr += 'p1';
+                    paramStr += '='
+                    var priceStr = parseFloat($(this).parent().next().next().next().next().html());
+                    paramStr += priceStr;
+                    paramStr += '&'
+                    // good_count
+                    paramStr += 'c1';
+                    paramStr += '='
+                    paramStr += $(this).parent().next().next().next().next().next().find('input').val();
+                    paramStr += '&'
+                });
+                paramStr = paramStr.substring(0, paramStr.length-1);
+                alert(paramStr);
+                $(this).attr('href', '/orderInfo/from_cart/'+paramStr);
+
+
+                {# Ajax 传递 #}
+                {# 商品pk 商品count 商品price #}
+            });
+        });
+    </script>
+{% endblock js %}
+
+{% block right_search_page_center %}
+    {# 商品数量 goodsCount 开始 #}
+    <div class="total_count">全部商品<em>{{ goodsCount }}</em>件</div>
+    {# 商品数量 结束 #}
+
+    {# 表头 开始 #}
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+    {# 表头 结束 #}
+
+    {# 商品列表 开始 #}
+    {% for cartInfo in cartInfoes %}
+        {# 遍历取出购物车信息集合中的每个购物车信息生成表格的一行 开始 #}
+        <ul class="cart_list_td clearfix" name="{{ cartInfo.pk }}">
+            {# 填写本条购物车信息中的商品信息 开始 #}
+                {# 勾选框 开始 #}
+		        <li class="col01"><input type="checkbox" name="{{ cartInfo.pk }}" checked></li>
+                {# 勾选框 结束 #}
+
+                {# 商品图片 开始 #}
+		        <li class="col02"><img src="{{ cartInfo.cGoods.gImage }}"></li>
+                {# 商品图片 结束 #}
+
+                {# 商品名称 开始 #}
+	    	    <li class="col03">{{ cartInfo.cGoods.gTitle }}</li>
+                {# 商品名称 结束 #}
+
+                {# 商品单位 开始 #}
+	    	    <li class="col04">500g</li>
+                {# 商品单位 结束 #}
+
+                {# 商品价格 开始 #}
+	    	    <li class="col05">{{ cartInfo.cGoods.gPrice }}元</li>
+                {# 商品价格 结束 #}
+
+                {# 购买数量 开始 #}
+		        <li class="col06">
+		        	<div class="num_add">
+			        	<a href="javascript:;" class="add fl">+</a>
+				        <input type="text" class="num_show fl" value="{{ cartInfo.cCount }}">
+    				    <a href="javascript:;" class="minus fl">-</a>
+	    		    </div>
+		        </li>
+                {# 购买数量 结束 #}
+
+                {# 商品总价 开始 #}
+		        <li class="col07">25.80元</li>
+                {# 商品总价 结束 #}
+
+                {# 删除商品 开始 #}
+	    	    <li class="col08"><a href="javascript:;">删除</a></li>
+                {# 删除商品 结束 #}
+            {# 填写本条购物车信息中的商品信息 结束 #}
+	    </ul>
+        {# 遍历取出购物车信息集合中的每个购物车信息生成表格的一行 结束 #}
+    {% endfor %}
+    {# 商品列表 结束 #}
+
+    {# 购买总计 开始 #}
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em>0.0</em><br>共计<b>0</b>件商品</li>
+		<li class="col04"><a href="orderInfo/from_cart/">去结算</a></li>
+	</ul>
+    {# 购买总计 结束 #}
+{% endblock right_search_page_center %}
