@@ -6,13 +6,9 @@ from django.http import HttpResponse,JsonResponse
 # Create your views here.
 
 def cartList(request):
-    user = request.session.get('uid', default='')  # session保持状态的key
-    if user == '':
-        return redirect('login.html')
-    else:
-        list = CartInfo.objects.filter(user_id=user)
-        context = {"list":list}
-        return render(request,'cart.html',context)
+    list = CartInfo.objects.filter(user_id=1)
+    context = {"list":list}
+    return render(request,'cart.html',context)
 
 def updateCount(request):
     print 'llll'
