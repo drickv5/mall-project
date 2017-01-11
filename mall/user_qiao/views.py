@@ -7,17 +7,17 @@ from django.core.paginator import Paginator
 from cart_kun.models import *
 from goods_qi.models import *
 
-def g_base(request):
-    return render(request,'base/g_base.html')
-
-def g_base_top(request):
-    return render(request,'base/g_base_top.html')
-
-def g_base_top_rightsearch(request):
-    return  render(request,'base/g_base_top_rightsearch.html')
-
-def user_center_info(request):
-    return render(request,'./user_center_info.html')
+# def g_base(request):
+#      return render(request,'base/g_base.html')
+#
+# def g_base_top(request):
+#     return render(request,'base/g_base_top.html')
+#
+# def g_base_top_rightsearch(request):
+#     return  render(request,'base/g_base_top_rightsearch.html')
+#
+# def user_center_info(request):
+#     return render(request,'./user_center_info.html')
 
 
 def userinfo(request):
@@ -49,6 +49,7 @@ def userorder(request,pIndex):
     # user_orders = orders.order_by(orders[1].ordernum)
     # print (orders.total)
     # 根据订单号查询订单详情
+
     # orderdet = OrderDetailInfo.objects.filter(order_id=orders.id)
     orderdet = OrderDtailInfo.objects.filter(order__id__in=[1,2,3,4])
     # print(len(orderdet))
@@ -68,7 +69,7 @@ def usersite(request):
 #用户收货地址
 def postTest(request):
     # print ('aaaa')
-    #获取用户数据
+    # 获取用户数据
     phone=request.POST['phone']
     # print("-------------------")
     recipients=request.POST['recipients']
@@ -87,44 +88,24 @@ def postTest(request):
 
 #用户全部订单
 def userCenterOrder(request):
-    #根据登陆用户id查处他的订单
+    # 根据登陆用户id查处他的订单
     orders = OrderInfo.objects.filter(user_id=1)
     print orders
 
     # user_orders = orders.order_by(orders[1].ordernum)
     # print (orders.total)
-    #根据订单号查询订单详情
+
+    # 根据订单号查询订单详情
     # orderdet = OrderDetailInfo.objects.filter(order__id__in=[1,2,3,4])
     orderdet = OrderDtailInfo.objects.filter(order__id=orders.id)[:4]
-    print(len(orderdet))
-   # print (orderdet.ordernum)
-    #根据订单详情查出对应商品
+    # print(len(orderdet))
+    # print (orderdet.ordernum)
+
+    # 根据订单详情查出对应商品
     goods = OrderDtailInfo.objects.filter(goods__id__in=[0,1,2,3,4])
     # print(goods.goods.title)
     context = {'orders':orders,'orderdet':orderdet,'goods':goods}
     return  render(request,'userCenter/user_center_order.html',context)
 
-
-# def pagTest(request, pIndex):
-#     list1 = [1,3,3,3,3,3]
-#     print(list1)
-#     p = Paginator(list1, 4)
-#     if pIndex == '':
-#         pIndex = '1'
-#     pIndex = int(pIndex)
-#     list2 = p.page(pIndex)
-#     plist = p.page_range
-#     return render(request, 'booktest/pagTest.html', {'list': list2, 'plist': plist, 'pIndex': pIndex})
-
-
-# def herolist(request,pindex):
-#     if pindex=='':
-#         pindex='1'
-#
-#     list=HeroInfo.objects.all()
-#     paginator=Paginator(list,5)
-#     page=paginator.page(int(pindex))
-#     context={'page':page}
-#     return render(request,'booktest/herolist.html',context)
 
 
