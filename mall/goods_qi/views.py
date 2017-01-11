@@ -64,6 +64,18 @@ def detail(request):
 	print goods
 	typeId = goods.gtype_id
 
+
+	#userqiao
+	if request.session.has_key('latest_goods_list'):
+		latest_goods_list = request.session.get('latest_goods_list')
+		latest_goods_list.insert(0, gid)
+		request.session['latest_goods_list'] = latest_goods_list
+	else:
+		latest_goods_list = []
+		latest_goods_list.insert(0,gid )
+		request.session['latest_goods_list'] = latest_goods_list
+
+
 	#新品推荐
 	if typeId == '0':
 		maxGoods = GoodsInfo.objects.filter(isDelete=False)

@@ -4,6 +4,8 @@ from models import *
 from django.http import HttpResponse,JsonResponse
 
 # Create your views here.
+from test5.booktest.models import UserInfo
+
 
 def cartList(request):
     list = CartInfo.objects.filter(user_id=1)
@@ -98,8 +100,8 @@ def place_order2(request):         #购物车跳转过来的页面
     if user=='':
         return redirect('login.html')
     else:
-    receInfo=UserInfo.objects.filter(id=user)
-    goodsInfo=CartInfo.objects.filter(user_id=user).filter(ischeck=True)
+        receInfo=UserInfo.objects.filter(id=user)
+        goodsInfo=CartInfo.objects.filter(user_id=user).filter(ischeck=True)
 
     totalnum=0
     totalprice=0
