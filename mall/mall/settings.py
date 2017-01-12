@@ -85,7 +85,7 @@ DATABASES = {
         'NAME':'malldb',
         'USER':'root',
         'PASSWORD':'mysql',
-        'HOST':'192.168.1.106',
+        'HOST':'192.168.21.84',
         'PORT':'3306',
     }
 }

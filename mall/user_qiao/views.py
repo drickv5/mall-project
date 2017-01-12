@@ -7,17 +7,17 @@ from django.core.paginator import Paginator
 from cart_kun.models import *
 from goods_qi.models import *
 
-# def g_base(request):
-#      return render(request,'base/g_base.html')
-#
-# def g_base_top(request):
-#     return render(request,'base/g_base_top.html')
-#
-# def g_base_top_rightsearch(request):
-#     return  render(request,'base/g_base_top_rightsearch.html')
-#
-# def user_center_info(request):
-#     return render(request,'./user_center_info.html')
+def g_base(request):
+     return render(request,'base/g_base.html')
+
+def g_base_top(request):
+    return render(request,'base/g_base_top.html')
+
+def g_base_top_rightsearch(request):
+    return  render(request,'base/g_base_top_rightsearch.html')
+
+def user_center_info(request):
+    return render(request,'./user_center_info.html')
 
 
 def userinfo(request):
