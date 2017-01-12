@@ -7,5 +7,5 @@ class User_admin(admin.ModelAdmin):
     list_display = ['id','uname']
 
 
-
 admin.site.register(UserInfo,User_admin)
+

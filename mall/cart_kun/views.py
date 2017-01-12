@@ -4,6 +4,8 @@ from models import *
 from django.http import HttpResponse,JsonResponse
 
 # Create your views here.
+from test5.booktest.models import UserInfo
+
 
 def cartList(request):
     list = CartInfo.objects.filter(user_id=1)

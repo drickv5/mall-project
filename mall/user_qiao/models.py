@@ -4,7 +4,7 @@ from django.db import models
 from django.db import models
 from goods_qi.models import GoodsInfo
 
-
+from cart_kun.models import  *
 
 
 class UserInfo(models.Model):

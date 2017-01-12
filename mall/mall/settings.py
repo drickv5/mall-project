@@ -85,7 +85,7 @@ DATABASES = {
         'NAME':'malldb',
         'USER':'root',
         'PASSWORD':'mysql',
-        'HOST':'localhost',
+        'HOST':'192.168.21.84',
         'PORT':'3306',
     }
 }
@@ -112,3 +112,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static')
 ]
+MEDIA_ROOT=os.path.join(BASE_DIR,"static/media/")

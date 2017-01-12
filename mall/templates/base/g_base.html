@@ -1,19 +1,31 @@
-{% comment %}
-    一级基模板:
-        Only footer and some necessary css
-{% endcomment %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+	<link rel="stylesheet" type="text/css" href="../../static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../static/css/main.css">
+	<script type="text/javascript" src="../../static/js/jquery-1.12.4.min.js" ></script>
+	<script type="text/javascript" src="../../static/js/jquery-ui.min.js" ></script>
+	<script type="text/javascript" src="../../static/js/jquery.cookie.js" ></script>
+	<script type="text/javascript" src="../../static/js/register.js" ></script>
+	<script type="text/javascript" src="../../static/js/slide.js" ></script>
+
+
+
 	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/static/js/slide.js"></script>
+
      {% block header %}{% endblock header %}
 </head>
 <body>
+{% comment %}
+    一级基模板:
+        Only footer and some necessary css
+{% endcomment %}
     {% block body_without_footer %}
 
     {% endblock body_without_footer %}
