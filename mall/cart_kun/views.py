@@ -98,8 +98,8 @@ def place_order2(request):         #购物车跳转过来的页面
     if user=='':
         return redirect('login.html')
     else:
-    receInfo=UserInfo.objects.filter(id=user)
-    goodsInfo=CartInfo.objects.filter(user_id=user).filter(ischeck=True)
+        receInfo=UserInfo.objects.filter(id=user)
+        goodsInfo=CartInfo.objects.filter(user_id=user).filter(ischeck=True)
 
     totalnum=0
     totalprice=0
