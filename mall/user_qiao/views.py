@@ -29,13 +29,12 @@ def userinfo(request):
         goods = GoodsInfo.objects.get(id=goods_id)
         latest_goods_list.append(goods)
     context={'list':latest_goods_list }
-
-
-
     return render(request,'user/userinfo.html',context)
 
 def userorder(request,pIndex):
-    list1 = [1, 3, 3, 3, 3, 35,5,5,2,5,5,5,5,5,25,5,5,5,10,5,5,5,2,5,2]
+    userId=request.session.get('uid')
+    list1 = OrderInfo.objects.filter(user_id=userId)
+    # list2 = OrderDtailInfo.objects.filter(order_id=userId)
     print(list1)
     p = Paginator(list1, 4)
     if pIndex == '':
@@ -44,22 +43,22 @@ def userorder(request,pIndex):
     list2 = p.page(pIndex)
     plist = p.page_range
     # 根据登陆用户id查处他的订单
-    orders = OrderInfo.objects.filter(user_id=1)
 
     # user_orders = orders.order_by(orders[1].ordernum)
     # print (orders.total)
     # 根据订单号查询订单详情
 
     # orderdet = OrderDetailInfo.objects.filter(order_id=orders.id)
-    orderdet = OrderDtailInfo.objects.filter(order__id__in=[1,2,3,4])
+    # orderdet = OrderDtailInfo.objects.filter(order__id__in=[1,2,3,4])
     # print(len(orderdet))
     # print (orderdet.ordernum)
     # 根据订单详情查出对应商品
     # goods = OrderDetailInfo.objects.filter(goods__id__in=[0, 1, 2, 3, 4])
 
     # context = {'orders': orders, 'orderdet': orderdet, 'goods': goods}
-    context = {'orders': orders, 'orderdet': orderdet,'list': list2, 'plist': plist, 'pIndex': pIndex}
-    print list2
+    # context = {'orders': list1, 'orderdet': orderdet,'list': list2, 'plist': plist, 'pIndex': pIndex}
+    # print list2
+    context = {'orders': list1,'list': list2, 'plist': plist, 'pIndex': pIndex}
     return render(request,'user/userorder.html',context)
 
 def usersite(request):

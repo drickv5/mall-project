@@ -16,7 +16,7 @@ class OrderInfo(models.Model):
     #订单编号
     id = models.CharField('订单编号', max_length=31, primary_key=True, null=False)
     #引入用户外键
-    user = models.ForeignKey(UserInfo)
+    user = models.ForeignKey(UserInfo)#usre_id
     #订单总价格
     ototal = models.DecimalField(max_digits=7,decimal_places=2)
     # 订单生成时间
